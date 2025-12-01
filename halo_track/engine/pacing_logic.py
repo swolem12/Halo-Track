@@ -5,6 +5,7 @@ Implements the LED chase patterns and pacing visualization logic.
 """
 
 import logging
+import math
 import time
 from enum import Enum
 from typing import Tuple, Optional
@@ -185,15 +186,36 @@ class PacingLogic:
 
     def _render_pulse(self) -> None:
         """Render a pulsing pattern."""
-        # Create a breathing effect based on position
         led_count = self.led_strip.get_led_count()
-        pulse_phase = (self._position / led_count) * 2 * 3.14159
-        brightness = (1 + abs(pulse_phase % 2 - 1)) / 2
+
+        # Calculate pulse phase based on LED position (0 to 2*pi for full cycle)
+        pulse_phase = (self._position / led_count) * 2 * math.pi
+
+        # Create smooth breathing effect using triangle wave
+        # Maps phase to brightness: 0->0.5, 1->1, 2->0.5 (repeating)
+        brightness = self._calculate_pulse_brightness(pulse_phase)
 
         color = tuple(int(c * brightness) for c in self.primary_color)
 
         for i in range(led_count):
             self.led_strip.set_pixel(i, color)
+
+    @staticmethod
+    def _calculate_pulse_brightness(phase: float) -> float:
+        """
+        Calculate pulse brightness from phase using triangle wave.
+
+        Args:
+            phase: Phase value in radians.
+
+        Returns:
+            Brightness value between 0.5 and 1.0.
+        """
+        # Normalize phase to 0-2 range and create triangle wave
+        normalized = phase % 2
+        triangle_value = abs(normalized - 1)
+        # Scale to 0.5-1.0 range for visible breathing effect
+        return 0.5 + (triangle_value * 0.5)
 
     def _render_solid(self) -> None:
         """Render a solid color."""

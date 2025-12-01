@@ -19,6 +19,11 @@ class LEDStrip:
     patterns on LED strips connected to the Raspberry Pi GPIO.
     """
 
+    # RGB color encoding bit shifts for 24-bit color
+    RED_SHIFT = 16
+    GREEN_SHIFT = 8
+    BLUE_MASK = 0xFF
+
     def __init__(
         self,
         led_count: int = 60,
@@ -139,7 +144,7 @@ class LEDStrip:
             self._virtual_leds[index] = (r, g, b)
         else:
             # Convert RGB to 24-bit color value
-            color_value = (r << 16) | (g << 8) | b
+            color_value = (r << self.RED_SHIFT) | (g << self.GREEN_SHIFT) | b
             self._strip.setPixelColor(index, color_value)
 
         return True
@@ -161,7 +166,11 @@ class LEDStrip:
             return self._virtual_leds[index]
         elif self._strip:
             color = self._strip.getPixelColor(index)
-            return ((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF)
+            return (
+                (color >> self.RED_SHIFT) & self.BLUE_MASK,
+                (color >> self.GREEN_SHIFT) & self.BLUE_MASK,
+                color & self.BLUE_MASK,
+            )
 
         return None
 

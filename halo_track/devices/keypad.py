@@ -215,6 +215,12 @@ class PaceInputHandler:
     Provides methods for entering and validating running pace values.
     """
 
+    # Constants for pace input parsing
+    PACE_INPUT_LENGTH = 4
+    MINUTES_END_INDEX = 2
+    SECONDS_START_INDEX = 2
+    MAX_SECONDS = 60
+
     def __init__(self, keypad: Keypad):
         """
         Initialize the pace input handler.
@@ -254,8 +260,8 @@ class PaceInputHandler:
             return None
 
         elif key.isdigit():
-            # Add digit to buffer (max 4 digits)
-            if len(self._input_buffer) < 4:
+            # Add digit to buffer (max PACE_INPUT_LENGTH digits)
+            if len(self._input_buffer) < self.PACE_INPUT_LENGTH:
                 self._input_buffer += key
             return None
 
@@ -270,11 +276,11 @@ class PaceInputHandler:
         """
         try:
             # Pad with leading zeros if needed
-            pace_str = self._input_buffer.zfill(4)
-            minutes = int(pace_str[:2])
-            seconds = int(pace_str[2:])
+            pace_str = self._input_buffer.zfill(self.PACE_INPUT_LENGTH)
+            minutes = int(pace_str[:self.MINUTES_END_INDEX])
+            seconds = int(pace_str[self.SECONDS_START_INDEX:])
 
-            if 0 <= seconds < 60:
+            if 0 <= seconds < self.MAX_SECONDS:
                 return minutes * 60 + seconds
             return None
 
