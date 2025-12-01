@@ -1,0 +1,35 @@
+# Halo Track Default Configuration
+# This file contains the default settings for the Halo Track system
+
+# LED Strip Configuration (WS2812B)
+led:
+  led_count: 60           # Number of LEDs in the strip
+  gpio_pin: 18            # GPIO pin for data (PWM capable)
+  brightness: 255         # Default brightness (0-255)
+  led_freq_hz: 800000     # LED signal frequency in Hz
+  dma_channel: 10         # DMA channel for PWM
+  invert: false           # Invert signal (for level shifters)
+  strip_type: "WS2812"    # LED strip type
+  chase_length: 5         # Number of LEDs in chase pattern
+
+# Keypad Configuration (4x4 Matrix)
+keypad:
+  row_pins: [17, 27, 22, 5]   # GPIO pins for rows
+  col_pins: [6, 13, 19, 26]   # GPIO pins for columns
+  debounce_time: 0.1          # Debounce time in seconds
+
+# Track Configuration
+track:
+  track_length_meters: 400.0  # Length of the track in meters
+  leds_per_meter: 30.0        # LED density per meter
+
+# Safety Limits
+safety:
+  min_pace_seconds: 180       # Minimum pace (3:00 min/km - very fast)
+  max_pace_seconds: 900       # Maximum pace (15:00 min/km - walking)
+  max_brightness: 255         # Maximum allowed brightness
+  min_brightness: 10          # Minimum allowed brightness
+  emergency_stop_enabled: true # Enable emergency stop functionality
+
+# Default pace in seconds per kilometer (8:00 min/km)
+default_pace_seconds: 480

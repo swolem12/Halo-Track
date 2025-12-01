@@ -1,0 +1,13 @@
+# Halo Track - Python Dependencies
+# For Raspberry Pi 4 with WS2812B LED strip
+
+# Core dependencies
+PyYAML>=6.0
+
+# Raspberry Pi specific (install on target device)
+# rpi_ws281x>=5.0.0
+# RPi.GPIO>=0.7.1
+
+# Optional: Testing and development
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
